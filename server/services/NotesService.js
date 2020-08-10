@@ -6,7 +6,7 @@ class NotesService {
     return await dbContext.Notes.create(body)
   }
   async getById(id) {
-    let data = await dbContext.Notes.find({ boardId: id })
+    let data = await dbContext.Notes.find({ bugId: id })
     if (!data) {
       throw new BadRequest("")
     }
@@ -15,7 +15,7 @@ class NotesService {
   async editNote(id, body) {
     return await dbContext.Notes.findByIdAndUpdate(id, body, { new: true })
   }
-  async deleteList(id) {
+  async deleteNote(id) {
     return await dbContext.Notes.findOneAndRemove({ _id: id })
   }
   async find(query = {}) {

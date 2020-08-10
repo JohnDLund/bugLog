@@ -10,11 +10,11 @@ export class NotesController extends BaseController {
     this.router
       .use(auth0provider.isAuthorized)
       .get("", this.getAll)
-      .get("/:id/tasks", this.getTaskByListId)
+      .get("/:id/notes", this.getBugsByNoteId)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .post("", this.create)
-      .put("/:id", this.editList)
-      .delete("/:id", this.deleteList)
+      .put("/:id", this.editNote)
+      .delete("/:id", this.deleteNote)
   }
 
   async getAll(req, res, next) {
@@ -25,7 +25,7 @@ export class NotesController extends BaseController {
       next(error);
     }
   }
-  async getTaskByListId(req, res, next) {
+  async getBugsByNoteId(req, res, next) {
     try {
       let data = await notesService.getById(req.params.id)
       return res.send(data)
@@ -41,17 +41,17 @@ export class NotesController extends BaseController {
       next(error);
     }
   }
-  async editList(req, res, next) {
+  async editNote(req, res, next) {
     try {
-      let list = await notesService.editNote(req.params.id, req.body)
-      res.send({ data: list, message: "Edited" })
+      let note = await notesService.editNote(req.params.id, req.body)
+      res.send({ data: note, message: "Edited" })
     } catch (error) {
       console.error(error);
     }
   }
-  async deleteList(req, res, next) {
+  async deleteNote(req, res, next) {
     try {
-      await notesService.deleteList(req.params.id)
+      await notesService.deleteNote(req.params.id)
       res.send("Deleted")
     } catch (error) {
       console.error(error);
