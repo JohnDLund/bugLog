@@ -41,12 +41,14 @@ export default new Vuex.Store({
         })
     },
 
-    addBug({ commit, dispatch }, bugData) {
-      console.log(bugData)
-      api.post('bugs', bugData)
-        .then(serverBug => {
-          dispatch('getBugs')
-        })
+    async addBug({ commit, dispatch }, bugData) {
+      try {
+        let res = await api.post('bugs', bugData)
+        dispatch('getBugs')
+        router.push({ name: "BugDetails", params: { id: res.data.id } })
+      } catch (err) {
+        console.error(err)
+      }
     },
 
     async getActiveBug({ commit }, bugId) {

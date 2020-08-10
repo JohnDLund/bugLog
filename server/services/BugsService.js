@@ -4,7 +4,7 @@ import { BadRequest } from "../utils/Errors"
 
 class BugsService {
   async getAll(userEmail) {
-    return await dbContext.Bugs.find({ creatorEmail: userEmail }).populate("creator", "name picture")
+    return await dbContext.Bugs.find()
   }
 
   async getById(id, userEmail) {
@@ -21,7 +21,7 @@ class BugsService {
   }
 
   async edit(id, userEmail, update) {
-    let data = await dbContext.Bugs.findOneAndUpdate({ _id: id, creatorEmail: userEmail }, update, { new: true })
+    let data = await dbContext.Bugs.findOneAndUpdate({ _id: id, creatorEmail: userEmail, closed: false }, update, { new: true })
     if (!data) {
       throw new BadRequest("Invalid ID or you do not own this board");
     }

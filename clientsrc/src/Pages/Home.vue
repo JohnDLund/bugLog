@@ -98,7 +98,7 @@
           </div>
         </div>
       </h4>
-      <h4 class="col-md-3 col-12 text-info">{{bug.creator.name}}</h4>
+      <h4 class="col-md-3 col-12 text-info">{{bug.creatorEmail}}</h4>
       <h4 class="col-md-3 col-12 text-success" v-if="bug.closed == false">Open</h4>
       <h4 class="col-md-3 col-12 text-danger" v-else>Closed</h4>
       <h4 class="col-md-3 col-12 text-warning">{{timeConversion(bug.updatedAt)}}</h4>
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import swal from "sweetalert";
 export default {
   name: "bugs",
   data() {
@@ -148,7 +149,20 @@ export default {
       this.newBugObject = { title: "", description: "" };
     },
     deleteBug(id) {
-      this.$store.dispatch("deleteBug", id);
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this bug",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          this.$store.dispatch("deleteBug", id);
+          swal("Bug has been deleted!", {
+            icon: "success",
+          });
+        }
+      });
     },
 
     editBug(id) {

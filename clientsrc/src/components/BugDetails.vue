@@ -104,7 +104,20 @@ export default {
       this.$store.dispatch("editBug", { id: bugId, closed: false });
     },
     deleteNote(note) {
-      this.$store.dispatch("deleteNote", note);
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this note",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          this.$store.dispatch("deleteNote", note);
+          swal("Note has been deleted!", {
+            icon: "success",
+          });
+        }
+      });
     },
     postNote(rawBugId) {
       this.$store.dispatch("postNote", {
