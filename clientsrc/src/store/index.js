@@ -26,6 +26,9 @@ export default new Vuex.Store({
     setActiveBug(state, bug) {
       state.activeBug = bug
     },
+    setNotes(state, notes) {
+      state.notes = notes
+    },
 
   },
   actions: {
@@ -46,7 +49,7 @@ export default new Vuex.Store({
         })
     },
 
-    async getBug({ commit }, bugId) {
+    async getActiveBug({ commit }, bugId) {
       try {
         let res = await api.get("bugs/" + bugId)
         console.log("got the bug", res.data);
@@ -55,6 +58,7 @@ export default new Vuex.Store({
         console.error(err)
       }
     },
+
     async deleteBug({ dispatch }, bugId) {
       try {
         let res = await api.delete("bugs/" + bugId)
@@ -65,18 +69,62 @@ export default new Vuex.Store({
       }
     },
 
-    async editBug({ dispatch }, bugData) {
+    async editBug({ dispatch, commit }, bugData) {
       try {
         console.log("bugData", bugData)
         let res = await api.put("bugs/" + bugData.id, bugData)
         console.log("edited the bug", res.data);
-        dispatch("getBugs", bugData.bugId)
+        dispatch("getBugs")
+        dispatch("getActiveBug", bugData.id)
+
+
       } catch (err) {
         console.error(err)
       }
     },
 
 
+
+    async getNotes({ commit }, bugId) {
+      try {
+        let res = await api.get("notes/" + bugId + "/notes")
+        console.log("got the notes", res.data);
+        commit("setNotes", res.data)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+
+    async postNote({ commit, dispatch }, noteData) {
+      try {
+        let res = await api.post("notes/", noteData)
+        console.log(res.data)
+        this.dispatch("getNotes", noteData.bugId)
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async deleteNote({ dispatch, commit }, note) {
+      try {
+        let res = await api.delete("notes/" + note.id)
+        console.log(res.data)
+        this.dispatch("getNotes", note.bugId)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async changeNote({ dispatch }, editedNoteObject) {
+      try {
+        let res = await api.put("notes/" + editedNoteObject._id, editedNoteObject.data)
+        console.log("got the data", res.data)
+        console.log("got the object", editedNoteObject)
+        this.dispatch("getActiveBug", res.data.bugId)
+      } catch (error) {
+        console.error(error)
+      }
+    },
 
 
 

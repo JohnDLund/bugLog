@@ -5,21 +5,24 @@
     </div>
 
     <div class="row my-4 justify-content-center">
-      <form class="col-md-3 col-12" @submit.prevent="addBug">
+      <form
+        class="form-inline col-md-7 col-12 d-flex justify-content-center"
+        @submit.prevent="addBug"
+      >
         <input
-          class="mb-2 form-control text-center"
+          class="mb-2 col-4 mr-2 form-control text-center"
           type="text"
           placeholder="Enter a bug title"
           v-model="newBugObject.title"
           required
         />
         <input
-          class="mb-2 form-control text-center"
+          class="mb-2 col-7 form-control text-center"
           type="text"
           placeholder="Enter a bug description"
           v-model="newBugObject.description"
         />
-        <button class="btn btn-block btn-primary mb-2" type="submit">List a Bug</button>
+        <button class="btn btn-block btn-primary mb-2" type="submit">List Bug</button>
       </form>
     </div>
 
@@ -33,7 +36,7 @@
     <div class="row py-2" v-for="bug in bugs" :bugData="bug" :key="bug.id">
       <h4 class="col-md-3 col-12 text-capitalize">
         <div class="row">
-          <router-link class="col-5" :to="{name: 'bug', params: {bug: bug.id}}">
+          <router-link class="col-6" :to="{name: 'BugDetails', params: {id: bug.id}}">
             <b>{{bug.title}}</b>
           </router-link>
           <div class="col-6">
@@ -58,21 +61,22 @@
           aria-hidden="true"
         >
           <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content p-4">
               <form class="form" @submit.prevent="editBug(bug.id)">
                 <input
                   type="text"
-                  class="form-control mb-2 text-capitalize"
+                  class="form-control mb-2"
                   placeholder="Edit bug title ..."
                   v-model="editedBugObject.title"
                 />
-                <input
+                <textarea
                   type="text"
-                  class="form-control mb-2 text-capitalize"
+                  class="form-control mb-2"
                   placeholder="Edit bug description ..."
+                  rows="3"
                   v-model="editedBugObject.description"
                 />
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Save changes</button>
               </form>
             </div>
