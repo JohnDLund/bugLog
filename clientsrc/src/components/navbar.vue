@@ -1,9 +1,22 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <router-link class="navbar-brand" :to="{ name: 'Home' }">
-      <img alt="Vue logo" src="../assets/logo.png" style="width: 15px; transform: rotate(-90deg)" />
-      <img alt="Vue logo" src="../assets/logo.png" style="width: 15px; transform: rotate(-90deg)" />ug Log
+  <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+    <router-link class="navbar-brand text-light" :to="{ name: 'Home' }">
+      <div class="ml-2">
+        <img
+          alt="Vue logo"
+          src="../assets/logo.png"
+          style="width: 20px; transform: rotate(-90deg)"
+          class="row"
+        />
+        <img
+          alt="Vue logo"
+          src="../assets/logo.png"
+          style="width: 20px; transform: rotate(-90deg)"
+          class="row"
+        />
+      </div>
     </router-link>
+    <h4 class="text-light m-0">ug Log</h4>
     <button
       class="navbar-toggler"
       type="button"
@@ -16,16 +29,16 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto ml-5">
         <li class="nav-item" :class="{ active: $route.name == 'Home' }">
-          <router-link :to="{ name: 'Home' }" class="nav-link">Home</router-link>
+          <router-link :to="{ name: 'Home' }" class="nav-link text-light">Home</router-link>
         </li>
         <li
           class="nav-item"
           v-if="$auth.isAuthenticated"
           :class="{ active: $route.name == 'Profile' }"
         >
-          <router-link class="nav-link" :to="{ name: 'Profile' }">Profile</router-link>
+          <router-link class="nav-link text-light" :to="{ name: 'Profile' }">Profile</router-link>
         </li>
       </ul>
       <span class="navbar-text">

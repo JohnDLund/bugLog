@@ -5,31 +5,41 @@
     </div>
 
     <div class="row my-4 justify-content-center">
-      <form
-        class="form-inline col-md-7 col-12 d-flex justify-content-center"
-        @submit.prevent="addBug"
-      >
-        <input
-          class="mb-2 col-4 mr-2 form-control text-center"
-          type="text"
-          placeholder="Enter a bug title"
-          v-model="newBugObject.title"
-          required
-        />
-        <input
-          class="mb-2 col-7 form-control text-center"
-          type="text"
-          placeholder="Enter a bug description"
-          v-model="newBugObject.description"
-        />
-        <button class="btn btn-block btn-primary mb-2" type="submit">List Bug</button>
-      </form>
+      <button
+        class="btn btn-block btn-primary mb-2 col-md-7 col-12"
+        @click="listBug = !listBug"
+        v-if="listBug == false"
+      >List Bug</button>
+      <div class="col-12 d-flex justify-content-center" v-if="listBug == true">
+        <form
+          class="form-inline col-md-7 col-12 d-flex justify-content-center"
+          @submit.prevent="addBug"
+        >
+          <input
+            class="mb-2 col-4 mr-2 form-control text-center"
+            type="text"
+            placeholder="Enter a bug title"
+            v-model="newBugObject.title"
+            required
+          />
+          <input
+            class="mb-2 col-7 form-control text-center"
+            type="text"
+            placeholder="Enter a bug description"
+            v-model="newBugObject.description"
+          />
+          <button class="btn btn-block btn-primary mb-2" type="submit">Submit</button>
+        </form>
+      </div>
     </div>
 
     <div class="row text-light my-2 border-bottom">
       <h3 class="col-md-3 col-12">Title:</h3>
       <h3 class="col-md-3 col-12">Reported By:</h3>
-      <h3 class="col-md-3 col-12">Status:</h3>
+      <h3 class="col-md-3 col-12">
+        Status:
+        <i class="fa fa-sort" @click="sortBugs"></i>
+      </h3>
       <h3 class="col-md-3 col-12">Last Modified:</h3>
     </div>
 
@@ -42,12 +52,17 @@
           <div class="col-6">
             <i
               class="fa fa-pencil text-warning px-3"
+              v-if="bug.closed == false"
               data-toggle="modal"
               :data-target="'#editBugModal'
           +
           bug.id"
             ></i>
-            <i class="fa fa-trash-o text-danger" @click="deleteBug(bug.id)"></i>
+            <i
+              class="fa fa-trash-o text-danger"
+              v-if="bug.closed == false"
+              @click="deleteBug(bug.id)"
+            ></i>
           </div>
         </div>
         <div
@@ -98,6 +113,8 @@ export default {
     return {
       newBugObject: {},
       editedBugObject: {},
+      listBug: false,
+      sortedBugs: false,
     };
   },
 
@@ -115,6 +132,13 @@ export default {
   },
 
   methods: {
+    sortBugs() {
+      this.sortedBugs = !this.sortedBugs;
+      if (this.sortedBugs == true) {
+        this.bugs.sort((x, y) => x.closed - y.closed);
+      } else this.bugs.sort((x, y) => y.closed - x.closed);
+    },
+
     timeConversion(data) {
       let newTime = data.slice(0, 10);
       return newTime;
